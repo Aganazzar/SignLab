@@ -10,7 +10,7 @@ print("""
 ║          SIGN LANGUAGE RECOGNITION - COMPLETE WORKFLOW                  ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 
-🎯 THREE SIMPLE STEPS:
+THREE SIMPLE STEPS:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -60,9 +60,9 @@ STEP 2: TRAIN THE MODEL
     • Trains a bidirectional GRU neural network
     • Shows progress each epoch:
       - Loss: how well model fits data
-      - Accuracy: % correct predictions
-      - ✓ Best! = better model found, saves it
-    • Takes ~5-10 minutes on GPU/MPS
+          - Accuracy: % correct predictions
+          - Best! = better model found, saves it
+        • Takes ~5-10 minutes on GPU/MPS
 
   How it works:
     1. Your hand landmark sequences go into the model
@@ -104,7 +104,7 @@ STEP 3: RUN REAL-TIME RECOGNITION
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📁 FOLDER STRUCTURE (AUTO-CREATED):
+FOLDER STRUCTURE (AUTO-CREATED):
 
   dataset/
     ├── hello/
@@ -120,7 +120,7 @@ STEP 3: RUN REAL-TIME RECOGNITION
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🔧 TROUBLESHOOTING:
+TROUBLESHOOTING:
 
   "No data found" when training?
     → Run collect_data.py first!
@@ -140,7 +140,7 @@ STEP 3: RUN REAL-TIME RECOGNITION
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 TIPS FOR BEST RESULTS:
+TIPS FOR BEST RESULTS:
 
   1. Consistent signing
      → Use same hand position for each sign

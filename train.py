@@ -17,11 +17,11 @@ WHAT YOU SEE:
   - Train Loss: how well model fits training data
   - Test Loss: how well model generalizes
   - Accuracy: % of sequences correctly classified
-  - ✓ Best model saved = better checkpoint found
+    - Best model saved = better checkpoint found
 
 IF YOU GET "NO DATA FOUND":
-  → Run: python collect_data.py
-  → Collect at least a few samples first
+    → Run: python collect_data.py
+    → Collect at least a few samples first
 
 CONFIGS TO TWEAK:
   - BATCH_SIZE: higher = faster but needs more memory
@@ -46,7 +46,7 @@ EPOCHS = 50
 LEARNING_RATE = 0.001
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 
-print(f"\n📱 Using device: {DEVICE}\n")
+print(f"\nUsing device: {DEVICE}\n")
 
 class SignDataset(torch.utils.data.Dataset):
     """Loads all .npy files from dataset/ folder and pads/truncates to fixed length"""
@@ -62,7 +62,7 @@ class SignDataset(torch.utils.data.Dataset):
             
             sign_dir = os.path.join(dataset_dir, sign)
             if not os.path.exists(sign_dir):
-                print(f"⚠️  Warning: {sign_dir} not found")
+                print(f"Warning: {sign_dir} not found")
                 continue
             
             # Load all .npy files for this sign
@@ -94,7 +94,7 @@ class SignDataset(torch.utils.data.Dataset):
                 self.labels.append(idx)
                 self.sign_names.append(sign)
         
-        print(f"✓ Loaded {len(self.sequences)} sequences from {dataset_dir}/")
+        print(f"Loaded {len(self.sequences)} sequences from {dataset_dir}/")
         
         # Show breakdown
         if len(self.sequences) > 0:
@@ -107,7 +107,7 @@ class SignDataset(torch.utils.data.Dataset):
         
         if len(self.sequences) == 0:
             raise RuntimeError(
-                f"❌ No data found in {dataset_dir}\n"
+                f"No data found in {dataset_dir}\n"
                 f"   Run: python collect_data.py"
             )
     
@@ -126,7 +126,7 @@ def train():
     print()
     
     # Load dataset
-    print("📂 Loading dataset...")
+    print("Loading dataset...")
     dataset = SignDataset(DATASET_DIR)
     
     # Split data
@@ -148,7 +148,7 @@ def train():
     feature_dim = sample.shape[1]
     output_dim = len(idx_to_sign)
     
-    print(f"\n📊 Training setup:")
+    print(f"\nTraining setup:")
     print(f"  - Feature dimension: {feature_dim}")
     print(f"  - Output classes: {output_dim}")
     print(f"  - Training samples: {len(train_dataset)}")
@@ -158,7 +158,7 @@ def train():
     print()
     
     # Build model
-    print("🧠 Building model...")
+    print("Building model...")
     model = SignRecognitionModel(
         input_dim=feature_dim,
         hidden_dim=256,
@@ -174,7 +174,7 @@ def train():
     best_loss = float('inf')
     
     print()
-    print("🎯 Training...")
+    print("Training...")
     print("-" * 70)
     
     # Training loop
@@ -238,7 +238,7 @@ def train():
         accuracy = 100 * correct / total
         
         # Print progress
-        status = " ✓ Best!" if test_loss < best_loss else ""
+        status = " Best!" if test_loss < best_loss else ""
         print(f"Epoch {epoch+1:3d}/{EPOCHS} | "
               f"Loss: {train_loss:.4f} | "
               f"Val: {test_loss:.4f} | "
@@ -254,8 +254,8 @@ def train():
     print("-" * 70)
     print()
     print("="*70)
-    print("✓ Training complete!")
-    print(f"✓ Model saved to {MODEL_PATH}")
+    print("Training complete!")
+    print(f"Model saved to {MODEL_PATH}")
     print()
     print("NEXT STEP:")
     print("  python -m realtime.realtime_inference")

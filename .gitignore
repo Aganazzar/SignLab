@@ -46,7 +46,7 @@ Icon?
 dataset/
 *.npy
 *.h5
-*.pth
+# *.pth
 *.tflite
 *.ckpt
 
@@ -62,5 +62,4 @@ dataset/
 *.swo
 *.tmp
 
-models/
 mediapipe/

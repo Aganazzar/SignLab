@@ -1,6 +1,10 @@
 # SIGN LANGUAGE SYSTEM - FULL MULTIMODAL UPGRADE
 
+<<<<<<< HEAD
 ## ✅ WHAT'S NEW
+=======
+## WHAT'S NEW
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 ### 1. **Face + Hand Detection**
    - **Hands**: 2 hands, 21 landmarks each (x, y, z positions)
@@ -34,7 +38,11 @@
    - Magenta dots and lines for face
    - Records full multimodal data
 
+<<<<<<< HEAD
 ## 📊 FEATURE BREAKDOWN
+=======
+## FEATURE BREAKDOWN
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 ```
 Per-Frame Features (~1500 total):
@@ -61,7 +69,11 @@ With velocity: ~1756 features per frame
 Without velocity: ~878 features per frame
 ```
 
+<<<<<<< HEAD
 ## 🎯 WHAT IT CAN NOW DETECT
+=======
+## WHAT IT CAN NOW DETECT
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 1. **Hand Gestures**: Position, shape, movement
 2. **Facial Expressions**: 
@@ -72,7 +84,11 @@ Without velocity: ~878 features per frame
 4. **Emotional Context**: Combined face + gesture
 5. **Full Body Language**: Hands + face together
 
+<<<<<<< HEAD
 ## 🚀 USAGE
+=======
+## USAGE
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 ### Step 1: Setup (ONE TIME)
 ```bash
@@ -106,7 +122,11 @@ python -m realtime.realtime_inference
 - Uses full feature set for prediction
 - Text-to-speech output
 
+<<<<<<< HEAD
 ## 🔧 CONFIGURATION
+=======
+## CONFIGURATION
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 ### Toggle Features
 Edit [realtime/feature_extractor.py](realtime/feature_extractor.py):
@@ -132,7 +152,11 @@ EPOCHS = 50
 LEARNING_RATE = 0.001
 ```
 
+<<<<<<< HEAD
 ## 🎨 VISUALIZATION
+=======
+## VISUALIZATION
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 During data collection, you'll see:
 - **Green skeleton**: Hand landmarks and connections
@@ -140,7 +164,11 @@ During data collection, you'll see:
 - **Magenta lines**: Face oval outline
 - **Real-time feedback**: Frame counter, sign name
 
+<<<<<<< HEAD
 ## 💡 WHY THIS IS BETTER
+=======
+## WHY THIS IS BETTER
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 1. **Richer Context**: Face expressions add emotional/contextual information
 2. **Better Accuracy**: More features = more discriminative power
@@ -148,6 +176,7 @@ During data collection, you'll see:
 4. **Head Position**: Nodding/shaking head matters in sign language
 5. **Robust**: Works even if hands partially occluded (face still visible)
 
+<<<<<<< HEAD
 ## 📁 FILES CHANGED
 
 - ✅ [realtime/feature_extractor.py](realtime/feature_extractor.py) - Added face detection + features
@@ -164,10 +193,32 @@ During data collection, you'll see:
 - ✅ **Variable sequence lengths**: Normalized to target length
 
 ## 🎯 NEXT STEPS
+=======
+## FILES CHANGED
+
+- [realtime/feature_extractor.py](realtime/feature_extractor.py) - Added face detection + features
+- [train.py](train.py) - Fixed variable-length sequences
+- [collect_data.py](collect_data.py) - Shows face landmarks
+- [setup_models.py](setup_models.py) - Downloads face model
+- All other files compatible
+
+## 🐛 FIXES
+
+- **Unequal sample sizes**: Automatic padding/truncation
+- **Missing face model**: Auto-download script
+- **Feature dimension mismatch**: Consistent dimensions
+- **Variable sequence lengths**: Normalized to target length
+
+## NEXT STEPS
+>>>>>>> 2dee0b8 (model.pth added for reference)
 
 1. Run `python setup_models.py` (if not done)
 2. Collect data with face: `python collect_data.py`
 3. Train: `python train.py`
 4. Test: `python -m realtime.realtime_inference`
 
+<<<<<<< HEAD
 Your sign language system now captures the full picture! 🤟👤
+=======
+Your sign language system now captures the full picture!
+>>>>>>> 2dee0b8 (model.pth added for reference)

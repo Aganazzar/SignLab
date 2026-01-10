@@ -50,9 +50,15 @@ if USE_FACE:
             min_face_detection_confidence=0.5
         )
         face_landmarker = FaceLandmarker.create_from_options(face_options)
+<<<<<<< HEAD
         print("✓ Face detection enabled\n")
     except Exception as e:
         print(f"⚠️  Face detection disabled: {e}")
+=======
+        print("Face detection enabled\n")
+    except Exception as e:
+        print(f"Face detection disabled: {e}")
+>>>>>>> 2dee0b8 (model.pth added for reference)
         print("   Run: python setup_models.py\n")
 
 mp_drawing = mp.solutions.drawing_utils
@@ -136,7 +142,7 @@ def collect_sign(sign_name):
     sample_count = len([f for f in os.listdir(sign_dir) if f.endswith('.npy')])
     
     print(f"\n{'='*60}")
-    print(f"📍 COLLECTING: {sign_name.upper()}")
+    print(f"COLLECTING: {sign_name.upper()}")
     print(f"{'='*60}")
     print(f"Progress: {sample_count}/{SAMPLES_PER_SIGN} samples collected\n")
     print("  → Position your hands in frame")
@@ -161,7 +167,7 @@ def collect_sign(sign_name):
         elif key == 27:  # ESC
             cap.release()
             cv2.destroyAllWindows()
-            print(f"✗ Skipped {sign_name}")
+            print(f"Skipped {sign_name}")
             return
     
     # Start automatic sample collection
@@ -222,18 +228,18 @@ def collect_sign(sign_name):
             if key == 27:  # ESC pressed: stop current sign immediately
                 cap.release()
                 cv2.destroyAllWindows()
-                print(f"✗ Stopped {sign_name} early at sample {sample_count + 1}")
+                print(f"Stopped {sign_name} early at sample {sample_count + 1}")
                 return
         
         # Save sequence
         save_path = os.path.join(sign_dir, f"{sample_count}.npy")
         np.save(save_path, np.array(sequence))
         sample_count += 1
-        print(f"✓ Saved Sample {sample_count} ({SEQUENCE_LENGTH} frames)")
+        print(f"Saved Sample {sample_count} ({SEQUENCE_LENGTH} frames)")
     
     cap.release()
     cv2.destroyAllWindows()
-    print(f"\n✓ Finished collecting {sign_name}")
+    print(f"\nFinished collecting {sign_name}")
     print(f"{'='*60}\n")
     print("Press ENTER to start collecting next sign...")
 
@@ -262,7 +268,7 @@ def main():
     if choice == "":
         # Collect all signs
         SIGNS = all_signs
-        print(f"\n✓ Will collect all {len(SIGNS)} signs\n")
+        print(f"\nWill collect all {len(SIGNS)} signs\n")
     else:
         # Parse user selection
         try:
@@ -272,13 +278,13 @@ def main():
                 print("Invalid selection, collecting all signs instead")
                 SIGNS = all_signs
             else:
-                print(f"\n✓ Selected signs: {', '.join(SIGNS)}\n")
+                print(f"\nSelected signs: {', '.join(SIGNS)}\n")
         except (ValueError, IndexError):
             print("Invalid input, collecting all signs instead")
             SIGNS = all_signs
     
-    print(f"🎯 Total signs to collect: {len(SIGNS)}")
-    print(f"🎯 Samples per sign: {SAMPLES_PER_SIGN}")
+    print(f"Total signs to collect: {len(SIGNS)}")
+    print(f"Samples per sign: {SAMPLES_PER_SIGN}")
     print()
     
     # Show status
@@ -288,7 +294,7 @@ def main():
         existing = len([f for f in os.listdir(sign_dir) if f.endswith('.npy')]) if os.path.exists(sign_dir) else 0
         
         if existing >= SAMPLES_PER_SIGN:
-            print(f"  ✓ [{idx}/{len(SIGNS)}] {sign:12s} - {existing}/{SAMPLES_PER_SIGN} (complete)")
+            print(f"  [{idx}/{len(SIGNS)}] {sign:12s} - {existing}/{SAMPLES_PER_SIGN} (complete)")
         else:
             print(f"    [{idx}/{len(SIGNS)}] {sign:12s} - {existing}/{SAMPLES_PER_SIGN} (need to collect)")
     
@@ -302,11 +308,11 @@ def main():
         if existing >= SAMPLES_PER_SIGN:
             continue
         
-        print(f"\n⏭️  NEXT: Sign [{idx}/{len(SIGNS)}] - {sign.upper()}")
+        print(f"\nNEXT: Sign [{idx}/{len(SIGNS)}] - {sign.upper()}")
         collect_sign(sign)
     
     print("\n" + "="*60)
-    print("✓ Data collection complete!")
+    print("Data collection complete!")
     print()
     print("NEXT STEP:")
     print("  python train.py")

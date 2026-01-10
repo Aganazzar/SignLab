@@ -27,7 +27,9 @@ idx_to_sign = {
     9: "help",
     10: "want",
     11: "food",
-    12: "drink"
+    12: "drink",
+    13: "see you later",
+    14: "more"
     
 }
 
