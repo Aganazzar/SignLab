@@ -22,7 +22,7 @@ SEQUENCE_LENGTH = 45
 SPEAK_COOLDOWN = 1.0
 
 st.set_page_config(page_title="Sign Recognition", layout="wide")
-st.title("🤟 Sign Language Recognition")
+st.title("Sign Language Recognition")
 
 @st.cache_resource
 def load_model(feature_dim):
