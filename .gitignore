@@ -44,13 +44,17 @@ Icon?
 # Media / Data / Models
 # ------------------------
 dataset/
+wlasl_raw/
+wlasl_processed/
 *.npy
+
 *.h5
 # *.pth
 *.tflite
 *.ckpt
 
 # ------------------------
+
 # Logs
 # ------------------------
 *.log
