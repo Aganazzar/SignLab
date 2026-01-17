@@ -50,15 +50,9 @@ if USE_FACE:
             min_face_detection_confidence=0.5
         )
         face_landmarker = FaceLandmarker.create_from_options(face_options)
-<<<<<<< HEAD
-        print("✓ Face detection enabled\n")
-    except Exception as e:
-        print(f"⚠️  Face detection disabled: {e}")
-=======
         print("Face detection enabled\n")
     except Exception as e:
         print(f"Face detection disabled: {e}")
->>>>>>> 2dee0b8 (model.pth added for reference)
         print("   Run: python setup_models.py\n")
 
 mp_drawing = mp.solutions.drawing_utils

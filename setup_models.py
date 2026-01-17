@@ -11,45 +11,27 @@ FACE_MODEL_PATH = "mediapipe/face_landmarker.task"
 os.makedirs("mediapipe", exist_ok=True)
 
 if os.path.exists(FACE_MODEL_PATH):
-<<<<<<< HEAD
-    print(f"✓ Face landmarker model already exists: {FACE_MODEL_PATH}")
-else:
-    print(f"📥 Downloading face landmarker model...")
-=======
     print(f"Face landmarker model already exists: {FACE_MODEL_PATH}")
 else:
     print(f"Downloading face landmarker model...")
->>>>>>> 2dee0b8 (model.pth added for reference)
     print(f"   URL: {FACE_MODEL_URL}")
     print(f"   Destination: {FACE_MODEL_PATH}")
     
     try:
         urllib.request.urlretrieve(FACE_MODEL_URL, FACE_MODEL_PATH)
         size_mb = os.path.getsize(FACE_MODEL_PATH) / (1024 * 1024)
-<<<<<<< HEAD
-        print(f"✓ Downloaded successfully ({size_mb:.1f} MB)")
-    except Exception as e:
-        print(f"❌ Download failed: {e}")
-=======
         print(f"Downloaded successfully ({size_mb:.1f} MB)")
     except Exception as e:
         print(f"Download failed: {e}")
->>>>>>> 2dee0b8 (model.pth added for reference)
         print(f"   Please download manually from: {FACE_MODEL_URL}")
         print(f"   Save it to: {FACE_MODEL_PATH}")
 
 # Check hand model
 HAND_MODEL_PATH = "mediapipe/hand_landmarker.task"
 if os.path.exists(HAND_MODEL_PATH):
-<<<<<<< HEAD
-    print(f"✓ Hand landmarker model exists: {HAND_MODEL_PATH}")
-else:
-    print(f"⚠️  Hand landmarker model not found: {HAND_MODEL_PATH}")
-=======
     print(f"Hand landmarker model exists: {HAND_MODEL_PATH}")
 else:
     print(f"Hand landmarker model not found: {HAND_MODEL_PATH}")
->>>>>>> 2dee0b8 (model.pth added for reference)
     print(f"   Make sure you have the hand model file!")
 
 print("\n" + "="*60)

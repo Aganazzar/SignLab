@@ -108,6 +108,31 @@ class StreamingFeatureExtractor:
 
     def extract(self, rgb_frame):
         from mediapipe.tasks.python.core import base_options
+        
+        # Validate input
+        if rgb_frame is None:
+            raise ValueError("Invalid frame: None")
+        
+        # Check if it's array-like (works for both np.ndarray and cv2.Mat)
+        if not hasattr(rgb_frame, 'dtype') or not hasattr(rgb_frame, 'shape'):
+            raise ValueError("Invalid frame: must be numpy array or cv2.Mat")
+        
+        # Convert to numpy array if needed
+        rgb_frame = np.asarray(rgb_frame)
+        
+        # Force uint8 dtype if needed
+        if rgb_frame.dtype == object:
+            raise ValueError("Invalid frame: object dtype not supported")
+        
+        if rgb_frame.dtype != np.uint8:
+            if rgb_frame.dtype in [np.float32, np.float64]:
+                rgb_frame = (np.clip(rgb_frame, 0, 1) * 255).astype(np.uint8)
+            else:
+                rgb_frame = rgb_frame.astype(np.uint8)
+        
+        # Ensure C-contiguous
+        rgb_frame = np.ascontiguousarray(rgb_frame, dtype=np.uint8)
+        
         if self.hand_landmarker is None:
             options = HandLandmarkerOptions(base_options=base_options.BaseOptions(model_asset_path="mediapipe/hand_landmarker.task"), num_hands=self.num_hands, min_hand_detection_confidence=0.5)
             self.hand_landmarker = HandLandmarker.create_from_options(options)

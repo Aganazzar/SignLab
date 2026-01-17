@@ -24,6 +24,7 @@ python train.py
 ### 3. Run Real-Time Recognition
 ```bash
 python -m realtime.realtime_inference
+python -m streamlit run minimal_ui.py --server.port 8501
 ```
 - Activates webcam
 - Shows live predictions
