@@ -20,7 +20,18 @@ DEVICE = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.i
 MODEL_PATH = "models/sign_model.pth"
 SEQUENCE_LENGTH = 45
 SPEAK_COOLDOWN = 1.0
-MIN_CONFIDENCE = 0.85  # Minimum confidence threshold
+MIN_CONFIDENCE = 0.7  # Minimum confidence threshold
+VELOCITY_THRESHOLD = 0.02  # Hand movement threshold for sign boundary
+STATIC_FRAMES = 1  # Frames hand must be static to trigger output
+
+def calculate_hand_velocity(features_current, features_prev):
+    """Calculate hand movement velocity"""
+    if features_prev is None:
+        return 0.0
+    hand_current = features_current[:63]
+    hand_prev = features_prev[:63]
+    velocity = np.linalg.norm(hand_current - hand_prev)
+    return velocity
 
 st.set_page_config(page_title="Sign Recognition", layout="wide")
 st.title("Sign Language Recognition")
@@ -76,6 +87,13 @@ if st.session_state.running:
     last_spoken = ""
     last_speak_time = 0
     
+    # Boundary detection variables
+    prev_features = None
+    static_frame_count = 0
+    is_signing = False
+    accumulated_predictions = []
+    accumulated_confidence = []
+    
     frame_count = 0
     while st.session_state.running and frame_count < 500:
         ret, frame = cap.read()
@@ -88,6 +106,17 @@ if st.session_state.running:
         features = extractor.extract(rgb)
         if features is not None:
             buffer.add(features)
+            
+            # Calculate velocity
+            velocity = calculate_hand_velocity(features, prev_features)
+            prev_features = features.copy()
+            
+            # Detect boundaries
+            if velocity > VELOCITY_THRESHOLD:
+                is_signing = True
+                static_frame_count = 0
+            else:
+                static_frame_count += 1
         
         # Run inference when buffer is full
         if buffer.is_full():
@@ -107,18 +136,34 @@ if st.session_state.running:
             decoded = greedy_ctc_decode(preds, blank=BLANK_IDX)
             text = " ".join(idx_to_sign[i] for i in decoded)
             
-            now = time.time()
+            # Accumulate during signing
+            if is_signing and text:
+                accumulated_predictions.append(text)
+                accumulated_confidence.append(confidence)
             
-            # Filter: confidence + change detection + cooldown
-            if (text and 
-                confidence >= MIN_CONFIDENCE and
-                text != last_spoken and 
-                now - last_speak_time > SPEAK_COOLDOWN):
+            # Output when static
+            if is_signing and static_frame_count >= STATIC_FRAMES:
+                if accumulated_predictions:
+                    from collections import Counter
+                    most_common = Counter(accumulated_predictions).most_common(1)[0][0]
+                    avg_confidence = np.mean(accumulated_confidence)
+                    
+                    now = time.time()
+                    
+                    if (avg_confidence >= MIN_CONFIDENCE and
+                        most_common != last_spoken and 
+                        now - last_speak_time > SPEAK_COOLDOWN):
+                        
+                        st.session_state.current_sign = most_common
+                        st.session_state.history.append(most_common)
+                        last_spoken = most_common
+                        last_speak_time = now
                 
-                st.session_state.current_sign = text
-                st.session_state.history.append(text)
-                last_spoken = text
-                last_speak_time = now
+                # Reset
+                accumulated_predictions.clear()
+                accumulated_confidence.clear()
+                is_signing = False
+                static_frame_count = 0
         
         cv2.putText(frame, f"Sign: {st.session_state.current_sign}", (10, 30),
                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
