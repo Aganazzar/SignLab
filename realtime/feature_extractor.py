@@ -33,7 +33,7 @@ class StreamingFeatureExtractor:
         if USE_ANGLES:
             dim += self.num_hands * 4
         if USE_FACE:
-            dim += len(FACE_KEY_POINTS) * FEATURES_PER_LM + 15
+            dim += len(FACE_KEY_POINTS) * FEATURES_PER_LM + 13
             if USE_HEAD_POSE:
                 dim += 3
         return dim
@@ -67,7 +67,7 @@ class StreamingFeatureExtractor:
 
     def compute_face_features(self, face_landmarks):
         if not face_landmarks or len(face_landmarks) == 0:
-            return np.zeros(15)
+            return np.zeros(13)
         lm = face_landmarks[0]
         features = []
         left_eye_left = np.array([lm[33].x, lm[33].y, lm[33].z])
@@ -90,7 +90,7 @@ class StreamingFeatureExtractor:
         features.extend([np.linalg.norm(eye_center - mouth_center), np.linalg.norm(np.array([lm[1].x, lm[1].y, lm[1].z]) - chin)])
         left_symmetry = np.linalg.norm(left_eye_left - mouth_left)
         right_symmetry = np.linalg.norm(right_eye_right - mouth_right)
-        features.extend([left_symmetry, right_symmetry, abs(left_symmetry - right_symmetry)])
+        features.append(abs(left_symmetry - right_symmetry))
         jaw_left = np.array([lm[93].x, lm[93].y, lm[93].z])
         jaw_right = np.array([lm[323].x, lm[323].y, lm[323].z])
         features.append(np.linalg.norm(jaw_left - jaw_right))
@@ -189,7 +189,7 @@ class StreamingFeatureExtractor:
                 if USE_HEAD_POSE:
                     frame_features.extend(self.compute_head_pose(face_result.face_landmarks))
             else:
-                face_feature_size = len(FACE_KEY_POINTS) * FEATURES_PER_LM + 15
+                face_feature_size = len(FACE_KEY_POINTS) * FEATURES_PER_LM + 13
                 if USE_HEAD_POSE:
                     face_feature_size += 3
                 frame_features.extend([0.0] * face_feature_size)

@@ -96,7 +96,7 @@ def load_wlasl_data(data_dir, vocab_file="wlasl_vocab.json"):
     X = np.array(X_list)
     y = np.array(y_list)
     
-    print(f"✅ Loaded {len(X)} samples")
+    print(f" Loaded {len(X)} samples")
     print(f"   Shape: {X.shape}")
     
     return X, y, vocab
@@ -170,10 +170,10 @@ def main():
     
     # Device
     device = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"🖥️  Using device: {device}\n")
+    print(f" Using device: {device}\n")
     
     # Load data
-    print("📂 Loading WLASL data...")
+    print(" Loading WLASL data...")
     X, y, vocab = load_wlasl_data(args.data)
     
     feature_dim = X.shape[2]
@@ -194,7 +194,7 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
     
-    print(f"📊 Train samples: {len(train_dataset)}")
+    print(f" Train samples: {len(train_dataset)}")
     print(f"   Test samples: {len(test_dataset)}\n")
     
     # Initialize model
@@ -210,7 +210,7 @@ def main():
     # Training loop
     best_test_acc = 0.0
     
-    print("🚀 Starting training...\n")
+    print(" Starting training...\n")
     
     for epoch in range(args.epochs):
         train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)
@@ -225,11 +225,11 @@ def main():
             best_test_acc = test_acc
             os.makedirs(os.path.dirname(args.model_path), exist_ok=True)
             torch.save(model.state_dict(), args.model_path)
-            print(f"  ✅ Best model saved! ({test_acc*100:.2f}%)")
+            print(f"  Best model saved! ({test_acc*100:.2f}%)")
         
         print()
     
-    print(f"🎉 Training complete!")
+    print(f"Training complete!")
     print(f"   Best test accuracy: {best_test_acc*100:.2f}%")
     print(f"   Model saved to: {args.model_path}")
     

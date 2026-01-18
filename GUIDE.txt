@@ -84,6 +84,8 @@ STEP 3: RUN REAL-TIME RECOGNITION
   Command:
     python -m realtime.realtime_inference
 
+    conda activate sign_stream && streamlit run minimal_ui.py
+
   Or use:
     python run.py
 

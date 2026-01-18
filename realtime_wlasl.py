@@ -17,6 +17,7 @@ MODEL_PATH = "models/wlasl_model.pth"
 VOCAB_PATH = "models/wlasl_model_vocab.json"
 SEQUENCE_LENGTH = 45
 SPEAK_COOLDOWN = 1.0  # seconds
+MIN_CONFIDENCE = 0.7  # Minimum confidence threshold
 # --------------------------------------- #
 
 # ---------------- LOAD VOCABULARY ---------------- #
@@ -146,16 +147,25 @@ def main():
             with torch.no_grad():
                 logits = model(x)
                 probs = torch.softmax(logits, dim=-1)
+                
+                # Get confidence score
+                max_probs = torch.max(probs, dim=-1)[0]
+                confidence = max_probs.mean().item()
+                
                 preds = torch.argmax(probs, dim=-1).squeeze(0).cpu().numpy()
 
             # CTC decode
             decoded = greedy_ctc_decode(preds, blank=BLANK_IDX)
             text = " ".join(idx_to_sign[i] for i in decoded)
 
-            # TTS with cooldown
+            # Filter: confidence + change detection + cooldown
             now = time.time()
-            if text and text != last_spoken and now - last_speak_time > SPEAK_COOLDOWN:
-                print(f"[RECOGNIZED] {text}")
+            if (text and 
+                confidence >= MIN_CONFIDENCE and
+                text != last_spoken and 
+                now - last_speak_time > SPEAK_COOLDOWN):
+                
+                print(f"[RECOGNIZED] {text} (confidence: {confidence:.2f})")
                 speak(text)
                 last_spoken = text
                 last_speak_time = now

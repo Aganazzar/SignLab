@@ -32,6 +32,8 @@ DEVICE = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.i
 MODEL_PATH = "models/wlasl_model.pth"
 SEQUENCE_LENGTH = 45
 SPEAK_COOLDOWN = 1.0  # seconds
+MIN_CONFIDENCE = 0.7  # Minimum confidence threshold
+
 # --------------------------------------- #
 
 # ---------------- TTS ---------------- #
@@ -105,14 +107,25 @@ def main():
             with torch.no_grad():
                 logits = model(x)        # (1, T, C)
                 probs = torch.softmax(logits, dim=-1)
+                
+                # Get confidence score (average max probability across sequence)
+                max_probs = torch.max(probs, dim=-1)[0]  # Max prob per frame
+                confidence = max_probs.mean().item()  # Average confidence
+                
                 preds = torch.argmax(probs, dim=-1).squeeze(0).cpu().numpy()
 
             decoded = greedy_ctc_decode(preds, blank=BLANK_IDX)
             text = " ".join(idx_to_sign[i] for i in decoded)
 
             now = time.time()
-            if text and text != last_spoken and now - last_speak_time > SPEAK_COOLDOWN:
-                print("[SIGN]:", text)
+            
+            # Filter: confidence threshold + change detection + cooldown
+            if (text and 
+                confidence >= MIN_CONFIDENCE and
+                text != last_spoken and 
+                now - last_speak_time > SPEAK_COOLDOWN):
+                
+                print(f"[SIGN] {text} (confidence: {confidence:.2f})")
                 speak(text)
                 last_spoken = text
                 last_speak_time = now

@@ -20,6 +20,7 @@ DEVICE = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.i
 MODEL_PATH = "models/sign_model.pth"
 SEQUENCE_LENGTH = 45
 SPEAK_COOLDOWN = 1.0
+MIN_CONFIDENCE = 0.85  # Minimum confidence threshold
 
 st.set_page_config(page_title="Sign Recognition", layout="wide")
 st.title("Sign Language Recognition")
@@ -96,13 +97,24 @@ if st.session_state.running:
             with torch.no_grad():
                 logits = model(x)
                 probs = torch.softmax(logits, dim=-1)
+                
+                # Get confidence score
+                max_probs = torch.max(probs, dim=-1)[0]
+                confidence = max_probs.mean().item()
+                
                 preds = torch.argmax(probs, dim=-1).squeeze(0).cpu().numpy()
             
             decoded = greedy_ctc_decode(preds, blank=BLANK_IDX)
             text = " ".join(idx_to_sign[i] for i in decoded)
             
             now = time.time()
-            if text and text != last_spoken and now - last_speak_time > SPEAK_COOLDOWN:
+            
+            # Filter: confidence + change detection + cooldown
+            if (text and 
+                confidence >= MIN_CONFIDENCE and
+                text != last_spoken and 
+                now - last_speak_time > SPEAK_COOLDOWN):
+                
                 st.session_state.current_sign = text
                 st.session_state.history.append(text)
                 last_spoken = text
